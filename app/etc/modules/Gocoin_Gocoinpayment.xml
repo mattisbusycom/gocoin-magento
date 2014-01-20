@@ -1,0 +1,11 @@
+<config>
+	<modules>
+		<Gocoin_Gocoinpayment>
+			<active>true</active>
+			<codePool>community</codePool>
+			<depends>
+				<Mage_Payment />
+			</depends>
+		</Gocoin_Gocoinpayment>
+	</modules>
+</config>

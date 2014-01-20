@@ -1,0 +1,20 @@
+<?php 
+    $url = $this->createInvoice();
+    switch($url) {
+	    case -1: break; // customer is using another payment method
+	    case false:
+		    echo 'Error creating invoice.  Please try again or try another payment solution.'; break;
+        case 'paid':
+            break;
+	    default:
+            echo '<script type="text/javascript">';
+            echo 'function openInvoiceWindow() {';
+            echo 'var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";';
+            echo 'var URL = "'.$url.'";';
+            echo 'var win = window.open(URL, "_blank", strWindowFeatures);';
+            echo '}';
+            echo 'openInvoiceWindow();';
+            echo '</script>';
+    }
+?>
+
