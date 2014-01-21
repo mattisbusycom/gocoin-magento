@@ -72,6 +72,20 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
         $response = $client->api->invoices->create($invoice_params);
         return $response;
     }
+    
+    function getAccessToken() {
+        $client = $this->createClient();
+        $b_auth = $client->authorize_api();
+        $result = array();
+        if ($b_auth) {
+            $result['success'] = true;
+            $result['data'] = $client->getToken();
+        } else {
+            $result['success'] = false;
+            $result['data'] = $client->getError();
+        } 
+        return $result;
+    }
 
     /**
     * Get Invoice by id
@@ -119,7 +133,7 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
     function addInvoiceData($quoteId, $invoice) {
         //remove existing items for quoteId
         $collection = Mage::getModel('Gocoinpayment/ipn')->getCollection()
-                                    ->AddFilter('quote_id', $quoteId);
+                                    ->AddFilter('order_id', $quoteId);
         if (count($collection) > 0) {
             foreach( $collection as $item) {
                 $item->delete();
