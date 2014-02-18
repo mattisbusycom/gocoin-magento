@@ -47,11 +47,11 @@ class Gocoin_Gocoinpayment_Model_Ipn extends Mage_Core_Model_Abstract
 	}
 	
 	function checkOrderPaid($quoteId) {
-		return $this->checkOrderStatus($quoteId, array('paid', 'confirmed', 'complete'));
+		return $this->checkOrderStatus($quoteId, array('paid', 'overpaid'));
 	}
 	
 	function checkOrderCompleted($quoteId) {
-		return $this->checkOrderStatus($quoteId, array('confirmed', 'complete'));
+		return $this->checkOrderStatus($quoteId, array('ready_to_ship', 'fulfilled'));
 	}
     
     function getInvoice($quoteId) {

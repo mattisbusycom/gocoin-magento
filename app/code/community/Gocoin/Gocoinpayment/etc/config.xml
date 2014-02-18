@@ -1,37 +1,34 @@
 <?xml version="1.0"?>
 <config>
 	<frontend>
-        <routers>
-            <gocoin_callback>
-                <use>standard</use>
-                <args>
-                    <module>Gocoin_Gocoinpayment</module>
-                    <frontName>gocoin_callback</frontName>
-                </args>
-            </gocoin_callback>
-        </routers>
-        <layout>			
-            <updates>
-                <Gocoinpayment>
-                    <file>gocoinpayment.xml</file>
-                </Gocoinpayment>
-            </updates>
-        </layout>
-    </frontend>
-
+    <routers>
+      <gocoin_callback>
+        <use>standard</use>
+        <args>
+          <module>Gocoin_Gocoinpayment</module>
+          <frontName>gocoin_callback</frontName>
+        </args>
+      </gocoin_callback>
+    </routers>
+    <layout>			
+      <updates>
+        <Gocoinpayment>
+          <file>gocoinpayment.xml</file>
+        </Gocoinpayment>
+      </updates>
+    </layout>
+  </frontend>
 	<modules>
 	   <Gocoin_Gocoinpayment>
 		  <version>1.0.0</version>
 	   </Gocoin_Gocoinpayment>
 	</modules>
- 
 	<global>
 		<blocks>
 			<gocoinpayment>
 				<class>Gocoin_Gocoinpayment_Block</class>
 			</gocoinpayment>
 		</blocks>
-
 		<models>
 			<Gocoinpayment>
 				<class>Gocoin_Gocoinpayment_Model</class>
@@ -46,21 +43,19 @@
 				</entities>
 			</Gocoin_resource>
 		</models>
-        
-        <helpers>
-            <Gocoinpayment>
-                <class>Gocoin_Gocoinpayment_Helper</class>
-            </Gocoinpayment>
-        </helpers>
-	 
+      <helpers>
+        <Gocoinpayment>
+          <class>Gocoin_Gocoinpayment_Helper</class>
+        </Gocoinpayment>
+      </helpers>
 		<resources>
 			<Gocoinpayment_setup>
-                <setup>
-	                <module>Gocoin_Gocoinpayment</module>
-                </setup>
-                <connection>
-	                <use>core_setup</use>
-                </connection>
+        <setup>
+          <module>Gocoin_Gocoinpayment</module>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
 			</Gocoinpayment_setup>
 			<Gocoinpayment_write>
 				<connection>
@@ -74,13 +69,12 @@
 			</Gocoinpayment_read>
 		</resources>
 	</global>
-	
 	<default>
 		<payment>
 			<Gocoinpayment>
 				<active>1</active>
 				<model>Gocoinpayment/paymentMethod</model>
-				<title>Gocoins</title>
+				<title>GoCoin</title>
 				<payment_action>authorize</payment_action>
 			</Gocoinpayment>
 		 </payment>

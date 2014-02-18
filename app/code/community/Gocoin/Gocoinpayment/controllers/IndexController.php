@@ -39,7 +39,7 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
     public function showtokenAction() {
         $token = Mage::helper('Gocoinpayment')->getAccessToken();
         if ($token['success'] == true) {
-            print_r('Access Token: '.$token['data']);
+            print_r('Copy this Access Token into your Magento Backend: '.$token['data']);
         } else {
             print_r('Error: '. $token['data']);
         }

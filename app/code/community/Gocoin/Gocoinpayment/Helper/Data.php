@@ -35,7 +35,6 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
             "price_currency" => "BTC",
             "base_price" => $price,
             "base_price_currency" => "USD",//$options['currency'],
-            "confirmations_required" => 6,
             "notification_level" => "all",
             "callback_url" => $options['callback_url'],
             "redirect_url" => $options['redirect_url'] ,
