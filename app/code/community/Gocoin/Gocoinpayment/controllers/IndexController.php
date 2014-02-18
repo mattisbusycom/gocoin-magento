@@ -25,11 +25,9 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
 				switch($response->event)
                 {
                     case 'invoice_created':
-                    case 'invoice_payment_acknowledged':
-                    case 'invoice_underpaid':
-                    case 'invoice_overpaid':
+                    case 'invoice_payment_received':
                         break;
-                    case 'invoice_paid':
+                    case 'invoice_ready_to_ship':
                         $method = Mage::getModel('Gocoinpayment/paymentMethod');
                         $method->markOrderPaid($order);
                         break;

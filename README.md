@@ -1,4 +1,4 @@
-2013 Gocoin
+2014 GoCoin
 
 Installation
 ------------

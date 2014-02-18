@@ -34,7 +34,7 @@ class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Pay
 		{
 			Mage::log('Error creating gocoin invoice', null, 'gocoin.log');
 			Mage::log($invoice->error, null, 'gocoin.log');
-			Mage::throwException("Error creating gocoin invoice.  Please try again or use another payment option.");
+			Mage::throwException("Error creating GoCoin invoice.  Please try again or use another payment option.");
 			return false; 
 		} else {
             //save invoice to database
