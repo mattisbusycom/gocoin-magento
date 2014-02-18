@@ -4,7 +4,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Version 0.1.0
 
-Note: This version of this plugin only supports USD as a base currency. 
+Note: This version of this plugin only supports USD as a base currency. Please contact support@gocoin.com with any questions/
 
 Installation
 ------------
