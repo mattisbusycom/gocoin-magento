@@ -15,7 +15,7 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 	protected $_canUseInternal          = false;
 	protected $_canUseCheckout          = true;
 	protected $_canUseForMultishipping  = true;
-    protected $_canSaveCc = false;
+        protected $_canSaveCc = false;
 	
 	function canUseForCurrency($currencyCode) {		
 		//currently we can only use USD currency
@@ -96,5 +96,12 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 		return $options;
 	}
     
+        public function getOrderPlaceRedirectUrl()
+        {
+            $url = "";
+            $url = Mage::getSingleton('checkout/session')->getData("invoice_url");
+            Mage::getSingleton('checkout/session')->setData("invoice_url","");
+            return $url;
+        }
 }
 ?>
