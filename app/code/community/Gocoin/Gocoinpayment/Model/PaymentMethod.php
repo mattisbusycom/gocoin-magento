@@ -80,6 +80,14 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 		}
 	}
 	
+        function changeOrderStatus($order, $status)
+        {
+            $order_id = $order->getId();
+            $order = Mage::getModel('sales/order')->load($order_id);
+            $order->setState($status, true);
+            $order->save();
+        }
+        
 	function getAddressValue($address) {
         $options = array (
             'customer_name' => $address->getName(),
