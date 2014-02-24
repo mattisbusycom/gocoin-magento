@@ -51,7 +51,8 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 	}
 	
 	function checkInvoiceCreated($payment) {
-		$quoteId = $payment->getOrder()->getQuoteId();
+		//$quoteId = $payment->getOrder()->getQuoteId();
+                $quoteId = $payment->getOrder()->getIncrementId();
 		$invoice = Mage::getModel('Gocoinpayment/ipn');
 		if (!$invoice->getInvoice($quoteId)) {
 			Mage::throwException("Invoice is not created on gocoin.com");

@@ -8,20 +8,22 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
 
         $client_id = Mage::getStoreConfig('payment/Gocoinpayment/client_id');
         $response = Mage::helper('Gocoinpayment')->getNotifyData();
-
+        
         if (isset($response->error))
             Mage::log($response->error, null, 'gocoin.log');
         else {
             $orderId = (int) $response->payload->order_id;
             if ($orderId) {
                 $quoteId = $orderId;
-                $order = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
+                //$order = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
+                $order = Mage::getModel('sales/order')->loadByIncrementId($quoteId);
             }
 
-            Mage::getModel('Gocoinpayment/ipn')->createInvoice($response->payload, $response->event);
-
+            //Mage::getModel('Gocoinpayment/ipn')->createInvoice($response->payload, $response->event);
+            
             // update the order if it exists already
             if ($order->getId()) {
+                Mage::getModel('Gocoinpayment/ipn')->addInvoiceData($response->payload, $response->event);
                 switch ($response->event) {
                     case 'invoice_created':
                     case 'invoice_payment_received':

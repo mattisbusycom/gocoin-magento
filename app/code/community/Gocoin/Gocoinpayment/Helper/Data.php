@@ -124,7 +124,7 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
             $response->error = 'Post Data Error';
             return $response;
         }
-        
+        Mage::log($post_data);
         $response = json_decode($post_data);
         return $response;
     }
