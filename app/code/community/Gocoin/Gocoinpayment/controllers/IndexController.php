@@ -4,13 +4,12 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
 
     public function indexAction() {
 
-        Mage::log(file_get_contents('php://input'), null, 'gocoin.log');
+        Mage::log(file_get_contents('php://input'), null, 'gocoin_webhooks.log');
 
         $client_id = Mage::getStoreConfig('payment/Gocoinpayment/client_id');
         $response = Mage::helper('Gocoinpayment')->getNotifyData();
-        
         if (isset($response->error))
-            Mage::log($response->error, null, 'gocoin.log');
+            Mage::log($response->error, null, 'gocoin_webhooks_error.log');
         else {
             $orderId = (int) $response->payload->order_id;
             if ($orderId) {

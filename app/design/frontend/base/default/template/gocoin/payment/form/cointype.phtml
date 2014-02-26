@@ -1,0 +1,17 @@
+<fieldset class="form-list">  
+    <?php $_code=$this->getMethodCode() ?>  
+    <ul id="payment_form_<?php echo $_code ?>" style="display:none">   
+        <li>
+            <div class="input-box">
+                <label for="<?php echo $_code ?>_coin_type"><?php echo $this->__('Coin Currency ') ?> <span class="required">*</span></label>
+                <select id="<?php echo $_code ?>_coin_type" name="payment[coin_type]" class="required-entry">
+                    <option value=""><?php echo $this->__('--Please Select--') ?></option>
+                <?php $_coin_type = $this->getInfoData('coin_type') ?>
+                <?php foreach ($this->getAvailableTypes() as $_bankCode => $_bankName): ?>
+                    <option value="<?php echo $_bankCode ?>"<?php if ($_bankCode == $_coin_type): ?> selected="selected"<?php endif ?>><?php echo $_bankName ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+        </li> 
+    </ul>  
+</fieldset>  

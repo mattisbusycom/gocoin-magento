@@ -1,0 +1,9 @@
+<?php if($_info = $this->getInfo()): ?>
+<?php 
+$_coinCurrency = $_info->getCoinType();
+$_coinCurrency = $_coinCurrency == ''?$_coinCurrency:'BTC';
+?>
+<?php echo $this->__('Coin Currency: %s', $this->htmlEscape($_coinCurrency)) ?>
+<?php endif; ?>
+
+ 

@@ -2,7 +2,7 @@
 
 class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Payment {
 
-    public function createInvoice() {
+    public function createInvoice($coin_type='BTC') {
         if (!($quote = Mage::getSingleton('checkout/session')->getQuote()) or !($payment = $quote->getPayment()) or !($instance = $payment->getMethodInstance()) or ($instance->getCode() != 'Gocoinpayment'))
             return -1;
 
@@ -24,7 +24,7 @@ class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Pay
 
         Mage::log('create invoice for ' . $price . ' ' . $quote->getQuoteCurrencyCode(), NULL, 'gocoin.log');
         //$invoice = Mage::helper('Gocoinpayment')->createInvoice($quoteId, $price, $options);
-        $invoice = Mage::helper('Gocoinpayment')->createInvoice($orderid, $price, $options);
+        $invoice = Mage::helper('Gocoinpayment')->createInvoice($orderid, $price, $options,$coin_type);
         Mage::log($invoice, NULL, 'gocoin.log');
 
         if (isset($invoice->error)) {
@@ -34,7 +34,6 @@ class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Pay
             return false;
         } else {
             //save invoice to database
-            //Mage::helper('Gocoinpayment')->addInvoiceData($quoteId, $invoice);
             Mage::helper('Gocoinpayment')->addInvoiceData($orderid, $invoice);
         }
 
