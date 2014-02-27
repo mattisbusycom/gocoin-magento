@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-
-
 <layout>
-	<checkout_onepage_review> 
+	<!--<checkout_onepage_review> 
 		<reference name="checkout.onepage.review.info.items.after">
 			<block name="gocoin.invoice" type="gocoinpayment/invoice" template="gocoin/invoice.phtml"/>
 		</reference>		
-	</checkout_onepage_review>	
+	</checkout_onepage_review>-->
+        <default>
+    </default>
 </layout>

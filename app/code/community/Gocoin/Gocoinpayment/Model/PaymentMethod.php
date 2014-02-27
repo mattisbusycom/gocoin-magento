@@ -16,6 +16,8 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 	protected $_canUseCheckout          = true;
 	protected $_canUseForMultishipping  = true;
         protected $_canSaveCc = false;
+        protected $_formBlockType = 'gocoinpayment/payment_form_cointype';
+        protected $_infoBlockType = 'gocoinpayment/payment_info_cointype';
 	
 	function canUseForCurrency($currencyCode) {		
 		//currently we can only use USD currency
@@ -51,7 +53,8 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 	}
 	
 	function checkInvoiceCreated($payment) {
-		$quoteId = $payment->getOrder()->getQuoteId();
+		//$quoteId = $payment->getOrder()->getQuoteId();
+                $quoteId = $payment->getOrder()->getIncrementId();
 		$invoice = Mage::getModel('Gocoinpayment/ipn');
 		if (!$invoice->getInvoice($quoteId)) {
 			Mage::throwException("Invoice is not created on gocoin.com");
@@ -80,6 +83,14 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
 		}
 	}
 	
+        function changeOrderStatus($order, $status)
+        {
+            $order_id = $order->getId();
+            $order = Mage::getModel('sales/order')->load($order_id);
+            $order->setState($status, true);
+            $order->save();
+        }
+        
 	function getAddressValue($address) {
         $options = array (
             'customer_name' => $address->getName(),
@@ -103,5 +114,21 @@ class Gocoin_Gocoinpayment_Model_PaymentMethod extends Mage_Payment_Model_Method
             Mage::getSingleton('checkout/session')->setData("invoice_url","");
             return $url;
         }
+        
+        public function assignData($data)
+        {           
+            if (!($data instanceof Varien_Object)) {
+                $data = new Varien_Object($data);
+            }
+            $coin_type = $data->getData("coin_type");
+            $data->setData("additional_data",$coin_type);
+            parent::assignData($data);
+            
+            $info = $this->getInfoInstance();
+            $info->setCoinType($data->getData("coin_type"));
+            Mage::getSingleton('checkout/session')->setData("coin_type", $coin_type);
+            return $this;
+        }
+
 }
 ?>

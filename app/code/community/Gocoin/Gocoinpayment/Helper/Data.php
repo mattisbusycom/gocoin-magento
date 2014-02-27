@@ -28,11 +28,11 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
         return $client;
     }
 
-    function createInvoice($orderId, $price, $options = array()) {
+    function createInvoice($orderId, $price, $options = array(),$coin_type='BTC') {
         $client = $this->createClient();
         // data for invoice creation
         $my_data = array (
-            "price_currency" => "BTC",
+            "price_currency" => $coin_type,
             "base_price" => $price,
             "base_price_currency" => "USD",//$options['currency'],
             "notification_level" => "all",
@@ -124,7 +124,7 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
             $response->error = 'Post Data Error';
             return $response;
         }
-        
+        Mage::log($post_data);
         $response = json_decode($post_data);
         return $response;
     }

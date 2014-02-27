@@ -10,19 +10,29 @@ class Gocoin_Gocoinpayment_Model_Ipn extends Mage_Core_Model_Abstract
 	
 	function addInvoiceData($invoice, $status)
 	{
-        $url = "https://gateway.gocoin.com/merchant/".$invoice->merchant_id."/invoices/".$invoice->id;
-		return $this
-			->setOrderId($invoice->order_id)
-			->setInvoiceId($invoice->id)
-			->setUrl($url)
-			->setStatus($status)
-			->setBtcPrice($invoice->price)
-			->setPrice($invoice->base_price)
-			->setCurrency($invoice->base_price_currency)
-			->setInvoiceTime($invoice->created_at)
-			->setExpirationTime($invoice->expires_at)
-			->setUpdatedTime($invoice->updated_at)
-			->save();
+            $url = "https://gateway.gocoin.com/merchant/".$invoice->merchant_id."/invoices/".$invoice->id;
+            
+            $collection = Mage::getModel('Gocoinpayment/ipn')->getCollection()
+                                    ->AddFilter('order_id', $invoice->order_id);
+            if (count($collection) > 0) {
+                foreach( $collection as $item) {
+                    $item->delete();
+                }
+            }
+        
+            return $this
+                    ->setOrderId($invoice->order_id)
+                    ->setInvoiceId($invoice->id)
+                    ->setUrl($url)
+                    ->setStatus($status)
+                    ->setBtcPrice($invoice->price)
+                    ->setPrice($invoice->base_price)
+                    ->setCurrency($invoice->base_price_currency)
+                    ->setInvoiceTime($invoice->created_at)
+                    ->setExpirationTime($invoice->expires_at)
+                    ->setUpdatedTime($invoice->updated_at)
+                    ->setCoinCurrency($invoice->price_currency)
+                    ->save();
 	}
 	
 	function checkOrderStatus($quoteId, $statuses)
