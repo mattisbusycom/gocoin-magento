@@ -54,7 +54,10 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
 
         $user = $client->api->user->self();
         if (!$user) {
-            return array('error' => $client->getError());
+            $response = new stdClass();
+            $response->error = $client->getError();
+            return $response;
+            //return array('error' => $client->getError());
         }
         // stick merchant id into params for invoice creation
         $invoice_params = array(

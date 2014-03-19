@@ -32,7 +32,15 @@ class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Pay
             Mage::log($invoice->error, null, 'gocoin.log');
             Mage::throwException("Error creating GoCoin invoice.  Please try again or use another payment option.");
             return false;
-        } else {
+        } 
+        elseif(empty($invoice->merchant_id) || empty($invoice->id))
+        {
+            Mage::log('Error creating gocoin invoice', null, 'gocoin.log');
+            Mage::log("Merchant ID or Invoice ID is blank", null, 'gocoin.log');
+            Mage::throwException("Error creating GoCoin invoice.  Please try again or use another payment option.");
+            return false;
+        }
+        else {
             //save invoice to database
             Mage::helper('Gocoinpayment')->addInvoiceData($orderid, $invoice);
         }
