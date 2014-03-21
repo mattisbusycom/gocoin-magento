@@ -14,11 +14,11 @@ class Gocoin_Gocoinpayment_Model_Ipn extends Mage_Core_Model_Abstract
             
             $collection = Mage::getModel('Gocoinpayment/ipn')->getCollection()
                                     ->AddFilter('order_id', $invoice->order_id);
-            if (count($collection) > 0) {
-                foreach( $collection as $item) {
-                    $item->delete();
-                }
-            }
+//            if (count($collection) > 0) {
+//                foreach( $collection as $item) {
+//                    $item->delete();
+//                }
+//            }
         
             return $this
                     ->setOrderId($invoice->order_id)

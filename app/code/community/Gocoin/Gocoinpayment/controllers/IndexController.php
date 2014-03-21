@@ -11,7 +11,7 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
         if (isset($response->error))
             Mage::log($response->error, null, 'gocoin_webhooks_error.log');
         else {
-            $orderId = (int) $response->payload->order_id;
+            $orderId = $response->payload->order_id;
             if ($orderId) {
                 $quoteId = $orderId;
                 //$order = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
@@ -40,7 +40,9 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
     }
 
     public function showtokenAction() {
-        $token = Mage::helper('Gocoinpayment')->getAccessToken();
+        $params = $this->getRequest()->getParams();
+        
+        $token = Mage::helper('Gocoinpayment')->getAccessToken($params['code']);
         if ($token['success'] == true) {
             print_r('Copy this Access Token into your Magento Backend: ' . $token['data']);
         } else {

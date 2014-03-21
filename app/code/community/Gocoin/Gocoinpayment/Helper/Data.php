@@ -1,35 +1,37 @@
 <?php
 
+require_once(Mage::getBaseDir('lib') . '/gocoin/src/GoCoin.php');
+
 class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
 {
     const CLIENT_ID      = 'payment/Gocoinpayment/client_id';
     const CLIENT_SECRET  = 'payment/Gocoinpayment/client_secret';
     const ACCESS_TOKEN   = 'payment/Gocoinpayment/access_token';
     
-    function createClient() {
-        $storeId = Mage::app()->getStore()->getId();
-        
-        $client_id = Mage::getStoreConfig(self::CLIENT_ID);
-        $client_secret = Mage::getStoreConfig(self::CLIENT_SECRET);
-        
-        include Mage::getBaseDir('lib').'/gocoin/src/client.php';
-        
-        $client = new Client( array(
-            'client_id' => $client_id,
-            'client_secret' => $client_secret,
-            'scope' => "user_read_write+merchant_read_write+invoice_read_write",
-        ));
-        
-        $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
-        if ($access_token != '') {
-            $client->setToken($access_token);
-        }
-        
-        return $client;
-    }
+//    function createClient() {
+//        $storeId = Mage::app()->getStore()->getId();
+//        
+//        $client_id = Mage::getStoreConfig(self::CLIENT_ID);
+//        $client_secret = Mage::getStoreConfig(self::CLIENT_SECRET);
+//        
+//        include Mage::getBaseDir('lib').'/gocoin/src/client.php';
+//        
+//        $client = new Client( array(
+//            'client_id' => $client_id,
+//            'client_secret' => $client_secret,
+//            'scope' => "user_read_write+merchant_read_write+invoice_read_write",
+//        ));
+//        
+//        $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
+//        if ($access_token != '') {
+//            $client->setToken($access_token);
+//        }
+//        
+//        return $client;
+//    }
 
     function createInvoice($orderId, $price, $options = array(),$coin_type='BTC') {
-        $client = $this->createClient();
+       //$client = $this->createClient();
         // data for invoice creation
         $my_data = array (
             "price_currency" => $coin_type,
@@ -50,42 +52,52 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
             "customer_email" => $options['customer_email'],
         );
 
-        $data_string = json_encode($my_data);
-
-        $user = $client->api->user->self();
-        if (!$user) {
-            $response = new stdClass();
-            $response->error = $client->getError();
-            return $response;
-            //return array('error' => $client->getError());
+        $client_id = Mage::getStoreConfig(self::CLIENT_ID);
+        $client_secret = Mage::getStoreConfig(self::CLIENT_SECRET);
+        $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
+        
+        if(empty($client_id) || empty($client_secret) || empty($access_token))
+        {
+            $obj = new stdClass();
+            $obj->error = "GoCoin Payment Paramaters not Set. Please report this to Site Administrator.";
+            return $obj;
         }
-        // stick merchant id into params for invoice creation
-        $invoice_params = array(
-            'id' => $user->merchant_id,
-            'data' => $data_string
-        );
-            
-        if (!$invoice_params) {
+        
+        try{
+            $user = GoCoin::getUser($access_token);
+            if($user)
+            {
+                $merchant_id = $user->merchant_id;
+                if(!empty($merchant_id))
+                {
+                    $invoice = GoCoin::createInvoice($access_token, $merchant_id, $my_data);
+                    return $invoice;
+                }
+            }
+        }catch(Exception $e)
+        {
             $response = new stdClass();
-            $response->error = $client->getError();
+            $response->error = $e->getMessage();
             return $response;
         }
-
-        $response = $client->api->invoices->create($invoice_params);
-        return $response;
+        
     }
     
-    function getAccessToken() {
-        $client = $this->createClient();
-        $b_auth = $client->authorize_api();
+    function getAccessToken($code) {
+        $client_id = Mage::getStoreConfig(self::CLIENT_ID);
+        $client_secret = Mage::getStoreConfig(self::CLIENT_SECRET);
+        //$access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
         $result = array();
-        if ($b_auth) {
+        try{
+            $token= GoCoin::requestAccessToken($client_id, $client_secret, $code, null);
             $result['success'] = true;
-            $result['data'] = $client->getToken();
-        } else {
+            $result['data'] = $token;
+        }catch(Exception $e)
+        {
             $result['success'] = false;
-            $result['data'] = $client->getError();
-        } 
+            $result['data'] = $e->getMessage();
+        }
+
         return $result;
     }
 
@@ -99,14 +111,18 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
     */
 
     function getInvoice($invoiceId, $client) {
+        $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
+        $response = GoCoin::getInvoice($token,$invoiceId);
         
-        if (!$client) {
-            $response = new stdClass();
-            $response->error = $client->getError();
-            return $response;
-        }
-        
-        $response = $client->api->invoices->get($invoiceId);
+//        
+//        
+//        if (!$client) {
+//            $response = new stdClass();
+//            $response->error = $client->getError();
+//            return $response;
+//        }
+//        
+//        $response = $client->api->invoices->get($invoiceId);
 
         return $response;    
     }

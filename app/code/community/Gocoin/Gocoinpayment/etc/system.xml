@@ -59,7 +59,7 @@
                                 alert('Please input Client Secret!');
                                 return;
                             }
-                            var currentUrl = window.location.origin + '/index.php/gocoin_callback/index/showtoken';
+                            var currentUrl = window.location.origin + '/magento/index.php/gocoin_callback/index/showtoken';
                             var url = "https://dashboard.gocoin.com/auth?response_type=code"
                                         + "&client_id=" + client_id
                                         + "&redirect_uri=" + currentUrl
