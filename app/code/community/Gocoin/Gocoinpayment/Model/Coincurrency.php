@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of Coincurrency
+ * Description of Coincurrency 
  *
  * @author mumate
  */
