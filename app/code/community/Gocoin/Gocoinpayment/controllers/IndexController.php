@@ -12,6 +12,14 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
             Mage::log($response->error, null, 'gocoin_webhooks_error.log');
         else {
             $orderId = $response->payload->order_id;
+            $fingerprint = $response->payload->user_defined_8;
+            
+            $valid_hook = Mage::getModel('Gocoinpayment/ipn')->validateFingerprint($orderId,$fingerprint);
+            if(!$valid_hook)
+            {
+                Mage::log("Invalid Webhook Request for Order ID: ".$orderId, null, 'gocoin_webhooks_error.log');
+                return;
+            }
             if ($orderId) {
                 $quoteId = $orderId;
                 //$order = Mage::getModel('sales/order')->load($quoteId, 'quote_id');

@@ -32,6 +32,7 @@ class Gocoin_Gocoinpayment_Model_Ipn extends Mage_Core_Model_Abstract
                     ->setExpirationTime($invoice->expires_at)
                     ->setUpdatedTime($invoice->updated_at)
                     ->setCoinCurrency($invoice->price_currency)
+                    ->setFingerprint($invoice->user_defined_8)
                     ->save();
 	}
 	
@@ -64,13 +65,22 @@ class Gocoin_Gocoinpayment_Model_Ipn extends Mage_Core_Model_Abstract
 		return $this->checkOrderStatus($quoteId, array('ready_to_ship', 'fulfilled'));
 	}
     
-    function getInvoice($quoteId) {
-        $collection = $this->getCollection()->AddFilter('order_id', $quoteId);
-        if (count($collection) == 0 ) return false;
-        $invoice = $collection->getFirstItem();
+        function getInvoice($quoteId) {
+            $collection = $this->getCollection()->AddFilter('order_id', $quoteId);
+            if (count($collection) == 0 ) return false;
+            $invoice = $collection->getFirstItem();
+
+            return $invoice;
+        }
         
-        return $invoice;
-    }
+        function validateFingerprint($quoteId,$fingerprint)
+        {
+            $collection = $this->getCollection()->AddFilter('order_id', $quoteId)->AddFilter('status', 'pending_payment')->AddFilter('fingerprint', $fingerprint);
+            if (count($collection) == 0 ) 
+                return false;
+            else
+                return true;
+        }
 
 }
 
