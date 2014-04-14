@@ -8,30 +8,7 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
     const CLIENT_SECRET  = 'payment/Gocoinpayment/client_secret';
     const ACCESS_TOKEN   = 'payment/Gocoinpayment/access_token';
     
-//    function createClient() {
-//        $storeId = Mage::app()->getStore()->getId();
-//        
-//        $client_id = Mage::getStoreConfig(self::CLIENT_ID);
-//        $client_secret = Mage::getStoreConfig(self::CLIENT_SECRET);
-//        
-//        include Mage::getBaseDir('lib').'/gocoin/src/client.php';
-//        
-//        $client = new Client( array(
-//            'client_id' => $client_id,
-//            'client_secret' => $client_secret,
-//            'scope' => "user_read_write+merchant_read_write+invoice_read_write",
-//        ));
-//        
-//        $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
-//        if ($access_token != '') {
-//            $client->setToken($access_token);
-//        }
-//        
-//        return $client;
-//    }
-
     function createInvoice($orderId, $price, $options = array(),$coin_type='BTC') {
-       //$client = $this->createClient();
         // data for invoice creation
         $my_data = array (
             "price_currency" => $coin_type,
@@ -117,16 +94,6 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
     function getInvoice($invoiceId, $client) {
         $access_token = Mage::getStoreConfig(self::ACCESS_TOKEN);
         $response = GoCoin::getInvoice($token,$invoiceId);
-        
-//        
-//        
-//        if (!$client) {
-//            $response = new stdClass();
-//            $response->error = $client->getError();
-//            return $response;
-//        }
-//        
-//        $response = $client->api->invoices->get($invoiceId);
 
         return $response;    
     }
@@ -169,7 +136,6 @@ class Gocoin_Gocoinpayment_Helper_Data extends Mage_Payment_Helper_Data
     {
         $query_str= '';
         $include_params = array('price_currency','base_price','base_price_currency','order_id','customer_name','customer_city','customer_region','customer_postal_code','customer_country','customer_phone','customer_email');
-        //$escape_params = array('callback_url','redirect_url','customer_address_1','customer_address_2','user_defined_1','user_defined_2','user_defined_3','user_defined_4','user_defined_5','user_defined_6','user_defined_7','user_defined_8');
         if(is_array($data))
         {
             ksort($data);

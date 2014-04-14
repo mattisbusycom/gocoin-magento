@@ -23,7 +23,6 @@ class Gocoin_Gocoinpayment_Block_Invoice extends Mage_Checkout_Block_Onepage_Pay
         $price = round($quote->getGrandTotal(), 4);
 
         Mage::log('create invoice for ' . $price . ' ' . $quote->getQuoteCurrencyCode(), NULL, 'gocoin.log');
-        //$invoice = Mage::helper('Gocoinpayment')->createInvoice($quoteId, $price, $options);
         $invoice = Mage::helper('Gocoinpayment')->createInvoice($orderid, $price, $options,$coin_type);
         Mage::log($invoice, NULL, 'gocoin.log');
 
