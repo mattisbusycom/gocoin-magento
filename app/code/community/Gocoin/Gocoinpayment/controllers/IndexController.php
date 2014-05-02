@@ -33,8 +33,8 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
                 Mage::getModel('Gocoinpayment/ipn')->addInvoiceData($response->payload, $response->event);
                 switch ($response->event) {
                     case 'invoice_created':
-                    case 'invoice_payment_received':
                         break;
+                    case 'invoice_payment_received':
                     case 'invoice_ready_to_ship':
                         $method = Mage::getModel('Gocoinpayment/paymentMethod');
                         $method->markOrderPaid($order);
