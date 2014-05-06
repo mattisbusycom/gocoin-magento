@@ -8,12 +8,14 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
 
         $client_id = Mage::getStoreConfig('payment/Gocoinpayment/client_id');
         $response = Mage::helper('Gocoinpayment')->getNotifyData();
+
         if (isset($response->error))
             Mage::log($response->error, null, 'gocoin_webhooks_error.log');
         else {
             $orderId = $response->payload->order_id;
             $fingerprint = $response->payload->user_defined_8;
-            
+            $status      = $response->payload->status;
+            if (($status == 'paid') || ($status == 'ready_to_ship')) {
             $valid_hook = Mage::getModel('Gocoinpayment/ipn')->validateFingerprint($orderId,$fingerprint);
             if(!$valid_hook)
             {
@@ -33,8 +35,8 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
                 Mage::getModel('Gocoinpayment/ipn')->addInvoiceData($response->payload, $response->event);
                 switch ($response->event) {
                     case 'invoice_created':
-                        break;
                     case 'invoice_payment_received':
+                        break;
                     case 'invoice_ready_to_ship':
                         $method = Mage::getModel('Gocoinpayment/paymentMethod');
                         $method->markOrderPaid($order);
@@ -44,6 +46,7 @@ class Gocoin_Gocoinpayment_IndexController extends Mage_Core_Controller_Front_Ac
                         break;
                 }
             }
+          }
         }
     }
 
