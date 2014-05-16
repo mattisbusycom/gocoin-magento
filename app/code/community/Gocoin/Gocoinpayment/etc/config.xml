@@ -30,7 +30,7 @@
     </frontend>
     <modules>
         <Gocoin_Gocoinpayment>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Gocoin_Gocoinpayment>
     </modules>
     <global>
