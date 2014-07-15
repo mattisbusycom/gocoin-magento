@@ -63,7 +63,7 @@
                             var url = "https://dashboard.gocoin.com/auth?response_type=code"
                                         + "&client_id=" + client_id
                                         + "&redirect_uri=" + currentUrl
-                                        + "&scope=user_read+merchant_read+invoice_read_write";
+                                        + "&scope=user_read+invoice_read_write";
                             var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
                             var win = window.open(url, "_blank", strWindowFeatures);
                             return;
